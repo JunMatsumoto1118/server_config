@@ -674,3 +674,25 @@ sample_directory = /usr/share/doc/postfix-2.6.6/samples
 # readme_directory: The location of the Postfix README files.
 #
 readme_directory = /usr/share/doc/postfix-2.6.6/README_FILES
+
+# SASL 対応
+smtpd_sasl_auth_enable = yes
+
+smtpd_recipient_restrictions =
+    permit_mynetworks
+    permit_sasl_authenticated
+    reject_unauth_destination
+
+# SMTPS 対応
+# 事前に「/usr/local/certbot/certbot-auto certonly -a standalone -m jhh.style@gmail.com -d mail.jhhk-family.net --agree-tos --no-bootstrap」を叩いておく
+smtp_tls_security_level = may
+smtpd_tls_security_level = may
+smtpd_tls_cert_file = /etc/letsencrypt/live/mail.jhhk-family.net/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/mail.jhhk-family.net/privkey.pem
+smtpd_tls_session_cache_database = btree:/var/lib/postfix/smtpd_scache
+tls_high_cipherlist = kEECDH:+kEECDH+SHA:kEDH:+kEDH+SHA:+kEDH+CAMELLIA:kECDH:+kECDH+SHA:kRSA:+kRSA+SHA:+kRSA+CAMELLIA:!aNULL:!eNULL:!SSLv2:!RC4:!MD5:!DES:!EXP:!SEED:!IDEA:!3DES
+smtp_tls_ciphers = high
+smtpd_tls_ciphers = high
+smtpd_tls_mandatory_ciphers = high
+
+
